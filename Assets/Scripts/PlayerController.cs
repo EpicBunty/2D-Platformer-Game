@@ -13,14 +13,28 @@ public class PlayerController : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
-            OnGround = true;     
+        if (collision.gameObject.CompareTag("Ground"))  { OnGround = true; }
+        
+
+        else if (collision.tag == "Respawn")
+        {
+            Debug.Log("Death by falling");
+            Respawn();
+        }
     }
-    private void OnTriggerExit2D(Collider2D collision) 
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
-            OnGround = false;
+        if (collision.gameObject.CompareTag("Ground"))  { OnGround = false; }
     }
+
+    /*void OnTriggerEnter2D(Collider other)
+    {
+        if (other.gameObject.tag == "Respawn")
+        {
+            Debug.Log("Death by falling");
+            Respawn();
+        }
+    }*/
     private void Awake()
     {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
@@ -117,7 +131,12 @@ public class PlayerController : MonoBehaviour
 
         transform.localScale = scale;
     }
-   
 
+    
+    void Respawn()
+    {
+        transform.position = Vector3.zero;
+
+    }
 
 }
