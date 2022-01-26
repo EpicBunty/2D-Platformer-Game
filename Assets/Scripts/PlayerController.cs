@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))  { OnGround = true; }
         
 
-        else if (collision.tag == "Respawn")
+        if (collision.tag == "Respawn")
         {
             Debug.Log("Death by falling");
             Respawn();
@@ -100,10 +100,10 @@ public class PlayerController : MonoBehaviour
 
     private void JumpandCrouch(float vertical)
     {
-        if (vertical > 0)
+        if (!OnGround)//(vertical > 0)
             animator.SetBool("jump", true);
         else if
-            (OnGround && vertical < 1) animator.SetBool("jump", false);
+            (OnGround /*&& vertical < 1*/) animator.SetBool("jump", false);
 
         if (vertical < 0)
         {
