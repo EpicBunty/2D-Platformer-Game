@@ -5,12 +5,8 @@ using UnityEngine;
 
 public class KeyController : MonoBehaviour 
 {
-    private ScoreController Score;
+    public ScoreController scoreController;
     
-    private void Start()
-    {
-        Score = FindObjectOfType<ScoreController>();
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -18,8 +14,8 @@ public class KeyController : MonoBehaviour
         if (collision.gameObject.GetComponent<PlayerController>() != null)
         {
             Debug.Log("key collided with player");
-            
-            Score.ScoreIncrement(10);
+
+            scoreController.ScoreIncrement(10);
             //ScoreController.ScoreIncrement(10);
             Destroy(gameObject);
         }
