@@ -13,6 +13,7 @@ public class HealthController : MonoBehaviour
         //MaxHealth = 3;
         PlayerHealth = MaxHealth;
         RefreshHealthUI();
+        Debug.Log("player health = " + PlayerHealth);
     }
 
     public void TakeDamage(int Damage)

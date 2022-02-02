@@ -1,31 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     public float movespeed;
     public Animator animator;
+    public bool facingright;
+    [SerializeField] private float DirectionFacing;
+
     private bool movingright;
-    private bool facingright;
     private Rigidbody2D rb;
     //private Vector2 Scale;
     public HealthController health;
 
     private void Awake()
     {
-         animator = gameObject.GetComponent<Animator>();
-         rb = gameObject.GetComponent<Rigidbody2D>();
+        animator = gameObject.GetComponent<Animator>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
     void Update()
     {
-        if (gameObject.transform.localScale.x > 0)    
-            facingright = true;
-                
-        else if (gameObject.transform.localScale.x < 0)
-            facingright = false;
+        DirectionFacing = gameObject.transform.localScale.x;
+        CheckDirectionFacing();
 
         Movement();
+    }
+
+    private void CheckDirectionFacing()
+    {
+        if (DirectionFacing > 0)
+        {
+            facingright = true;
+            Debug.Log("Enemy facing right");
+        }
+        else //if (gameObject.transform.localScale.x < 0)
+        {
+            facingright = false;
+            Debug.Log("Enemy facing right");
+        }
     }
 
     void Movement()
@@ -33,7 +44,7 @@ public class EnemyController : MonoBehaviour
         MoveRight();
         MoveLeft();
         //if (rb.position.x != 0)
-            //animator.Play("Chomper Walk");
+        //animator.Play("Chomper Walk");
         //Flip();
     }
     private void MoveRight()
@@ -51,7 +62,7 @@ public class EnemyController : MonoBehaviour
     private void MoveLeft()
     {
         if (!facingright)
-        {   
+        {
             Vector3 move = transform.position;
             move.x = move.x - 1 * Time.deltaTime * movespeed;
             transform.position = move;
@@ -60,7 +71,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void Flip()
+    void ReverseDirection()
     {
         Vector3 Scale = transform.localScale;
         if (movingright)
@@ -81,7 +92,7 @@ public class EnemyController : MonoBehaviour
         if (collision.CompareTag("Patrol"))
         {
             //Debug.Log("Enemy collided with patrol marker");
-            Flip();
+            ReverseDirection();
         }
     }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5283677509604013928}
   - component: {fileID: 5283677509604013924}
   - component: {fileID: 5283677509604013925}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyChomper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,6 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movespeed: 1
   animator: {fileID: 0}
+  facingright: 1
+  DirectionFacing: 0
   health: {fileID: 0}
 --- !u!50 &5283677509604013925
 Rigidbody2D:
