@@ -10,12 +10,12 @@ public class EnemyController : MonoBehaviour
     private bool facingright;
     private Rigidbody2D rb;
     //private Vector2 Scale;
+    public HealthController health;
 
     private void Awake()
     {
          animator = gameObject.GetComponent<Animator>();
          rb = gameObject.GetComponent<Rigidbody2D>();
-        //Vector2 Scale = transform.localScale;
     }
     void Update()
     {
@@ -67,13 +67,20 @@ public class EnemyController : MonoBehaviour
             Scale.x *= -1;
         else /*(!movingright)*/ Scale.x = Mathf.Abs(Scale.x * 1);
         transform.localScale = Scale;
-    }  
-
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerController>())
+        {
+            Debug.Log("Enemy collided with player");
+            health.TakeDamage(1);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Patrol"))
         {
-            Debug.Log("Enemy collided with patrol marker");
+            //Debug.Log("Enemy collided with patrol marker");
             Flip();
         }
     }
