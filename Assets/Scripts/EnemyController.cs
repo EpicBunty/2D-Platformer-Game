@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     {
         animator = gameObject.GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        //Debug.Log("facing right = "facingright);
     }
     void Update()
     {
@@ -30,12 +31,12 @@ public class EnemyController : MonoBehaviour
         if (DirectionFacing > 0)
         {
             facingright = true;
-            Debug.Log("Enemy facing right");
+            //Debug.Log. ("Enemy facing right");
         }
         else //if (gameObject.transform.localScale.x < 0)
         {
             facingright = false;
-            Debug.Log("Enemy facing right");
+            //Debug.Log("Enemy facing right");
         }
     }
 
@@ -78,12 +79,13 @@ public class EnemyController : MonoBehaviour
             Scale.x *= -1;
         else /*(!movingright)*/ Scale.x = Mathf.Abs(Scale.x * 1);
         transform.localScale = Scale;
+       // Debug.Log("flipped");
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<PlayerController>())
         {
-            Debug.Log("Enemy collided with player");
+            //Debug.Log("Enemy collided with player");
             health.TakeDamage(1);
         }
     }

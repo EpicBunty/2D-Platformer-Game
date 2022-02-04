@@ -6,30 +6,29 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     Rigidbody2D rb2d;
     Collider2D coll;
-    LEVELCONTROL level;
-    /*[SerializeField] private float velocity_y;
-    [SerializeField] private float velocity_x;*/
+    public GameOverController level;
+    public ScoreController scoreController;
+
+
     [SerializeField] private float Speed;
     [SerializeField] private float jumpforce;
     [SerializeField] private float jumpheldforce;
     [SerializeField] private float vertical;
     [SerializeField] private float horizontal;
     [SerializeField] private float movespeed;
-    /*[SerializeField] private int JumpCount;
-    [SerializeField] private int CurrentJumpCount;*/
 
     [SerializeField] private bool onground;
-    [SerializeField] private bool isJumping;
+    //[SerializeField] private bool isJumping;
     [SerializeField] private bool JumpPressed;
     [SerializeField] private bool JumpHeld;
 
     [SerializeField] private bool isCrouching;
     [SerializeField] private LayerMask jumpableGround;
-/*
-    private Rigidbody2D rb2d;
-    //private Animator animator;
-    private Collider2D coll;
-    public LEVELCONTROL level;*/
+    /*
+        private Rigidbody2D rb2d;
+        //private Animator animator;
+        private Collider2D coll;
+        public LEVELCONTROL level;*/
 
 
     /*private string currentState;
@@ -51,36 +50,35 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
-        level = gameObject.GetComponent<LEVELCONTROL>();
-
-
-
+        //level = gameObject.GetComponent<LEVELCONTROL>();
     }
 
 
     void Update()
     {
-        /*onground = rb2d.velocity.y == 0;
-        isJumping= !onground;*/
+        /*onground = rb2d.velocity.y == 0;*/
+        //isJumping= !onground;
 
         Inputs();
         Run();
         Flip(horizontal);
         Animations();
         JumpPress();
+        if (Input.GetButtonDown("Cancel"))
+        {
+            OpenInGameMenu();
+        }
 
-
-        if (OnGround())//(rb2d.velocity.y==0)
+        /*if (OnGround())//(rb2d.velocity.y==0)
         {
             isJumping = false;
 
-            /*JumpHeld = false;
-            JumpPressed = false;*/
-        }
+            *//*JumpHeld = false;
+            JumpPressed = false;*//*
+        }*/
 
 
         //PlayerMovementAnimation(horizontal, vertical);
@@ -139,8 +137,8 @@ public class PlayerController : MonoBehaviour
         if (OnGround() && JumpPressed)
         {
             rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
-            isJumping = true;
-            Debug.Log("jump pressed and ongound = JUMPING");
+            //isJumping = true;
+            //Debug.Log("jump pressed and ongound = JUMPING");
         }
     }
 
@@ -166,6 +164,38 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
     }
 
+
+    void Respawn()
+    {
+        transform.position = Vector3.zero;
+    }
+
+    public void OpenInGameMenu()
+    {
+        level.InGameMenuActive();
+        this.enabled = false;
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+
+            Respawn();
+        }
+        else if (collision.gameObject.CompareTag("SceneManagement"))
+        {
+            level.LoadNextScene();
+        }
+        else if (collision.gameObject.CompareTag("Collectible"))
+        {
+            scoreController.ScoreIncrement(10);
+            //ScoreController.ScoreIncrement(10);
+            Destroy(collision.gameObject);
+        }
+    }
+
     private bool OnGround()
     {
         //RaycastHit2D raycastHit = 
@@ -186,26 +216,6 @@ public class PlayerController : MonoBehaviour
 
     }*/
     }
-
-    void Respawn()
-    {
-        transform.position = Vector3.zero;
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Respawn"))
-        {
-            Debug.Log("Death by falling");
-            Respawn();
-        }
-        else if (collision.gameObject.CompareTag("SceneManagement"))
-        {
-            level.LoadNextScene();
-        }
-    }
-
     ////////////////////////////////////////
     /*private static void LoadNextScene()
     {
@@ -214,13 +224,13 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene(NextScene);
     }*/
 }
-    /* public void ReloadLevel()
-     {
-         string currentscene = SceneManager.GetActiveScene().name;
-         SceneManager.LoadScene(currentscene);
-         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+/* public void ReloadLevel()
+ {
+     string currentscene = SceneManager.GetActiveScene().name;
+     SceneManager.LoadScene(currentscene);
+     //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-     }*/
+ }*/
 
 /* private void MoveCharacter(float horizontal, float vertical)
  {
