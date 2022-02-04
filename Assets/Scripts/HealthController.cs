@@ -21,6 +21,7 @@ public class HealthController : MonoBehaviour
 
     public void TakeDamage(int Damage)
     {
+        playerController.gameObject.GetComponent<Animator>().SetTrigger("tookdamage");
         PlayerHealth -= Damage;
         Debug.Log("player health = " + PlayerHealth);
         RefreshHealthUI();
