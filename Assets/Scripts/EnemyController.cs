@@ -1,0 +1,101 @@
+using UnityEngine;
+
+public class EnemyController : MonoBehaviour
+{
+    public float movespeed;
+    public Animator animator;
+    public bool facingright;
+    [SerializeField] private float DirectionFacing;
+
+    private bool movingright;
+    private Rigidbody2D rb;
+    //private Vector2 Scale;
+    public HealthController health;
+
+    private void Awake()
+    {
+        animator = gameObject.GetComponent<Animator>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        //Debug.Log("facing right = "facingright);
+    }
+    void Update()
+    {
+        DirectionFacing = gameObject.transform.localScale.x;
+        CheckDirectionFacing();
+
+        Movement();
+    }
+
+    private void CheckDirectionFacing()
+    {
+        if (DirectionFacing > 0)
+        {
+            facingright = true;
+            //Debug.Log. ("Enemy facing right");
+        }
+        else //if (gameObject.transform.localScale.x < 0)
+        {
+            facingright = false;
+            //Debug.Log("Enemy facing right");
+        }
+    }
+
+    void Movement()
+    {
+        MoveRight();
+        MoveLeft();
+        //if (rb.position.x != 0)
+        //animator.Play("Chomper Walk");
+        //Flip();
+    }
+    private void MoveRight()
+    {
+        if (facingright)
+        {
+            //Debug.Log("Moving Right");
+            Vector3 move = transform.position;
+            move.x = move.x + 1 * Time.deltaTime * movespeed;
+            transform.position = move;
+            movingright = true;
+            animator.Play("Chomper Walk");
+        }
+    }
+    private void MoveLeft()
+    {
+        if (!facingright)
+        {
+            Vector3 move = transform.position;
+            move.x = move.x - 1 * Time.deltaTime * movespeed;
+            transform.position = move;
+            movingright = false;
+            animator.Play("Chomper Walk");
+        }
+    }
+
+    void ReverseDirection()
+    {
+        Vector3 Scale = transform.localScale;
+        if (movingright)
+            Scale.x *= -1;
+        else /*(!movingright)*/ Scale.x = Mathf.Abs(Scale.x * 1);
+        transform.localScale = Scale;
+       // Debug.Log("flipped");
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerController>())
+        {
+            //Debug.Log("Enemy collided with player");
+            health.TakeDamage(1);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Patrol"))
+        {
+            //Debug.Log("Enemy collided with patrol marker");
+            ReverseDirection();
+        }
+    }
+
+}
