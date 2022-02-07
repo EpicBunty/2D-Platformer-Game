@@ -30,7 +30,6 @@ public class HealthController : MonoBehaviour
         else if (PlayerHealth < 1)
         {
             PlayerHealth = 0;
-            //level.PlayerDead();
             playerController.OpenInGameMenu();
         }
     }

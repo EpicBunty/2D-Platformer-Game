@@ -6,26 +6,29 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     Rigidbody2D rb2d;
     Collider2D coll;
-    public GameOverController level;
+
+    LevelController levelController;
+    public GameOverController gameOverController;
     public ScoreController scoreController;
 
 
     [SerializeField] private float Speed;
     [SerializeField] private float jumpforce;
-    [SerializeField] private float jumpheldforce;
-    [SerializeField] private float vertical;
+    [SerializeField] private float jumpheldforce;  //can remove
+    [SerializeField] private float vertical; // can remove
     [SerializeField] private float horizontal;
     [SerializeField] private float movespeed;
 
-    [SerializeField] private bool onground;
+   // [SerializeField] private bool onground;
     //[SerializeField] private bool isJumping;
     [SerializeField] private bool JumpPressed;
     [SerializeField] private bool JumpHeld;
 
     [SerializeField] private bool isCrouching;
     [SerializeField] private LayerMask jumpableGround;
-    /*
-        private Rigidbody2D rb2d;
+
+    
+      /*  private Rigidbody2D rb2d;
         //private Animator animator;
         private Collider2D coll;
         public LEVELCONTROL level;*/
@@ -44,16 +47,28 @@ public class PlayerController : MonoBehaviour
 
         animator.Play(newState);
 
-        currentState = newState;
-    }*/
+        currentState = newState;  }*/
+  
 
+    void Respawn()
+    {
+        transform.position = Vector3.zero;
+    }
+
+    public void OpenInGameMenu()
+    {
+        gameOverController.gameObject.SetActive(true);
+        //gameOverController.InGameMenu(true);
+        this.enabled = false;
+        //Time.timeScale = 0;
+    }
 
     private void Awake()
     {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
-        //level = gameObject.GetComponent<LEVELCONTROL>();
+        levelController = gameObject.GetComponent<LevelController>();
     }
 
 
@@ -62,16 +77,14 @@ public class PlayerController : MonoBehaviour
         /*onground = rb2d.velocity.y == 0;*/
         //isJumping= !onground;
 
-        Inputs();
+        InputsAndAnimations();
         Run();
-        Flip(horizontal);
-        Animations();
+        Flip();
         JumpPress();
         if (Input.GetButtonDown("Cancel"))
         {
             OpenInGameMenu();
         }
-
         /*if (OnGround())//(rb2d.velocity.y==0)
         {
             isJumping = false;
@@ -89,15 +102,6 @@ public class PlayerController : MonoBehaviour
         JumpHold();
     }
 
-    private void Inputs()
-    {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        isCrouching = Input.GetKey(KeyCode.LeftControl);
-        JumpPressed = Input.GetKeyDown(KeyCode.Space);
-        JumpHeld = Input.GetKey(KeyCode.Space);
-    }
-
-
     /* private void JumpMethod()
      {
          if (JumpPressed)
@@ -112,8 +116,13 @@ public class PlayerController : MonoBehaviour
          }*//*
      }*/
 
-    private void Animations()
+    private void InputsAndAnimations()
     {
+        horizontal = Input.GetAxisRaw("Horizontal");
+        isCrouching = Input.GetKey(KeyCode.LeftControl);
+        JumpPressed = Input.GetKeyDown(KeyCode.Space);
+        JumpHeld = Input.GetKey(KeyCode.Space);
+
         animator.SetFloat("y_velocity", rb2d.velocity.y);
         animator.SetFloat("x_velocity", Mathf.Abs(rb2d.velocity.x));//Mathf.Abs(horizontal));
         animator.SetBool("jump", JumpPressed);// isJumping);
@@ -151,7 +160,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Flip(float horizontal)
+    private void Flip()
     {
         Vector3 scale = transform.localScale;
 
@@ -164,19 +173,6 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
     }
 
-
-    void Respawn()
-    {
-        transform.position = Vector3.zero;
-    }
-
-    public void OpenInGameMenu()
-    {
-        level.InGameMenuActive();
-        this.enabled = false;
-    }
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Respawn"))
@@ -186,7 +182,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("SceneManagement"))
         {
-            level.LoadNextScene();
+            levelController.LoadNextScene();
         }
         else if (collision.gameObject.CompareTag("Collectible"))
         {

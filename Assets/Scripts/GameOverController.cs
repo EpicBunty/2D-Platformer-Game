@@ -2,55 +2,38 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
 public class GameOverController : MonoBehaviour
 {
-    private int currentscene;
-    private int NextScene;
+    private int CurrentScene;
+    public int LastScene;
+    //private int PreviousScene;
     public Button restartButton;
     public Button mainMenuButton;
+
+    LevelController levelController;
+
     private void Awake()
     {
-        //NextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        //currentscene = SceneManager.GetActiveScene().buildIndex;
-        restartButton.onClick.AddListener(ReloadLevel);
-        mainMenuButton.onClick.AddListener(LoadLobby);
-    }
+        
+        levelController = gameObject.GetComponent<LevelController>();
+        CurrentScene = SceneManager.GetActiveScene().buildIndex;
 
-    /*private void Update()
-    {
-        Input.GetButtonDown("cancel");
-    }*/
-
-    public void InGameMenuActive()
-    {
-        gameObject.SetActive(true);
-    }
-
-    public void ReloadLevel()
-    {
-        Debug.Log("reload level called");
-        currentscene = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentscene);
-    }
-
-    public void LoadNextScene()
-    {
-        NextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        Debug.Log("loading next scene " + NextScene);
-        SceneManager.LoadScene(NextScene);
-    }
-
-    public void LoadLobby()
-    {
-        //int PreviousScene = SceneManager.LoadScene(0);
-        Debug.Log("loading lobby");
-        SceneManager.LoadScene(0,LoadSceneMode.Single);
+        restartButton.onClick.AddListener(levelController.ReloadLevel);
+        mainMenuButton.onClick.AddListener(levelController.LoadLobby);
         
     }
 
-    public void QuitGame()
+
+
+
+    public void InGameMenu(bool OnorOff)
     {
-        UnityEditor.EditorApplication.isPlaying = false;
-        Application.Quit();
+        gameObject.SetActive(OnorOff);
     }
+        /*if (CurrentScene != 0)
+        {
+            LastScene = CurrentScene;
+        }
+    }*/
 }
