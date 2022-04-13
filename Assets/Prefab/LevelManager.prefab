@@ -43,10 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b48190dd719761479e5d6becea079a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentScene:
-    m_Handle: 0
-  NextScene:
-    m_Handle: 0
   CurrentSceneIndex: 0
   NextSceneIndex: 0
   Levels:
@@ -54,3 +50,5 @@ MonoBehaviour:
   - Level1
   - Level2
   - Level3
+  - Level4
+  - Level5

@@ -67,7 +67,7 @@ public class LevelManager : MonoBehaviour
         NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
 
         Debug.Log("Current Scene is " + CurrentScene.name);
-        Debug.Log("Next Scene is " + NextScene.name);
+        //Debug.Log("Next Scene is " + NextScene.name);
         //Debug.Log("Next Scene is " + SceneManager.GetSceneByBuildIndex(NextSceneIndex).name;
     }
 
@@ -124,7 +124,8 @@ public class LevelManager : MonoBehaviour
     public void LoadNextScene()
     {
         //Init();
-        Debug.Log("level manager is loading next scene which is " + NextScene.name);
+        Debug.Log("level manager is loading next scene");// which is " + NextScene.name);
         SceneManager.LoadScene(NextSceneIndex);
     }
+
 }

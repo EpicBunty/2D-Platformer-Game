@@ -5,13 +5,13 @@ using UnityEngine;
 public class KeyController : MonoBehaviour
 {
     //SerializeField
-   [SerializeField] ScoreController scoreController;
+   [SerializeField] UITextController uITextController;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<PlayerController>())
         {
-            scoreController.ScoreIncrement(10);
+            uITextController.ScoreIncrement(10);
             gameObject.SetActive(false);
         }
     }

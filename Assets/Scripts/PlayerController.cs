@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Collider2D coll;
 
     [SerializeField] private GameOverController gameOverController;
+    [SerializeField] private LevelCompleteMenu levelCompleteMenu;
 
     //private bool isJumping;
 
@@ -129,8 +130,9 @@ public class PlayerController : MonoBehaviour
 
             LevelManager.Instance.MarkCurrentLevelComplete();
             LevelManager.Instance.MarkNextLevelUnlocked();
-            LevelManager.Instance.LoadNextScene();
-            LevelManager.Instance.Init();
+            levelCompleteMenu.gameObject.SetActive(true);
+           //LevelManager.Instance.LoadNextScene();
+            //LevelManager.Instance.Init();
 
         }
 

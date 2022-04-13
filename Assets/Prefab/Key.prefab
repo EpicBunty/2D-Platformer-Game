@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b952d76fecb5f4ea618eb129603eae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreController: {fileID: 0}
+  uITextController: {fileID: 0}
