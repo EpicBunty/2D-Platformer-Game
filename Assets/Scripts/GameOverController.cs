@@ -1,39 +1,37 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameOverController : MonoBehaviour
 {
-    private int CurrentScene;
-    public int LastScene;
+    /*private int CurrentScene;
+    public int LastScene;*/
     //private int PreviousScene;
     public Button restartButton;
     public Button mainMenuButton;
 
-    LevelController levelController;
+    //LevelController levelController;
 
     private void Awake()
     {
-        
-        levelController = gameObject.GetComponent<LevelController>();
-        CurrentScene = SceneManager.GetActiveScene().buildIndex;
+        //restartButton.onClick.AddListener(LevelManager.Instance.ReloadLevel);
+        //mainMenuButton.onClick.AddListener(LevelManager.Instance.LoadLobby);
 
-        restartButton.onClick.AddListener(levelController.ReloadLevel);
-        mainMenuButton.onClick.AddListener(levelController.LoadLobby);
-        
+        restartButton.onClick.AddListener(ReloadLevel);
+        mainMenuButton.onClick.AddListener(MainMenu);
+
     }
 
-
-
-
-    public void InGameMenu(bool OnorOff)
+    public void ReloadLevel()
     {
-        gameObject.SetActive(OnorOff);
+        //Debug.Log("reload level called from level manager");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-        /*if (CurrentScene != 0)
-        {
-            LastScene = CurrentScene;
-        }
-    }*/
+
+    public void MainMenu()
+    {
+        //Debug.Log("loading main menu from level manager");
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
 }

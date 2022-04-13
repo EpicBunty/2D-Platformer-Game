@@ -1,10 +1,11 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
+    private static LevelManager instance;
     public int CurrentScene;
     private static int scenetocontinue;
     public int LastScene { get { return scenetocontinue; } }
@@ -21,7 +22,7 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    /*public void InGameMenu(bool IsActive)
+    *//*public void InGameMenu(bool IsActive)
     {
         gameObject.SetActive(IsActive);
 
@@ -29,7 +30,7 @@ public class LevelController : MonoBehaviour
         {
             LastScene = CurrentScene;
         }
-    }*/
+    }*//*
 
     public void ReloadLevel()
     {
@@ -57,3 +58,4 @@ public class LevelController : MonoBehaviour
         Application.Quit();
     }
 }
+*/

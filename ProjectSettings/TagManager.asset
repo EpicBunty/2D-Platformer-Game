@@ -6,8 +6,8 @@ TagManager:
   tags:
   - Ground
   - Patrol
-  - SceneManagement
   - Collectible
+  - LevelComplete
   layers:
   - Default
   - TransparentFX
