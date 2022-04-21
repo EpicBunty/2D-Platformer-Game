@@ -26,6 +26,7 @@ public class HealthController : MonoBehaviour
 
         else if (PlayerHealth < 1)
         {
+            SoundManager.Instance.Play(Sounds.PlayerDeath);
             PlayerHealth = 0;
             playerController.OpenInGameMenu();
         }
@@ -43,4 +44,5 @@ public class HealthController : MonoBehaviour
             }
         }
     }
+   
 }

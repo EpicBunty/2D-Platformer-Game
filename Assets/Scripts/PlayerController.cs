@@ -1,15 +1,15 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
 
     Animator animator;
     Rigidbody2D rb2d;
-    Collider2D coll;
+    public Collider2D coll;
 
     [SerializeField] private GameOverController gameOverController;
     [SerializeField] private LevelCompleteMenu levelCompleteMenu;
+    [SerializeField] private HealthController healthController;
 
     //private bool isJumping;
 
@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     void Respawn()
     {
+        healthController.TakeDamage(1);
         transform.position = Vector3.zero;
     }
 
@@ -81,36 +82,50 @@ public class PlayerController : MonoBehaviour
 
     private void RunAndFlip()
     {
-        Vector2 position = transform.position;
-        if (!isCrouching)
+        if (horizontal != 0)
         {
-            position.x = position.x + horizontal * speed * Time.deltaTime;
-            transform.position = position;
-        }
+            //if (!isCrouching && horizontal != 0)
+            if (!isCrouching)// == false)
+            {
+                Vector2 position = transform.position;
+                position.x = position.x + horizontal * speed * Time.deltaTime;
+                transform.position = position;
+                if (SoundManager.Instance.soundEffect.isPlaying == false)
+                {
+                    SoundManager.Instance.Play(Sounds.PlayerMove);
+                }
+            }
 
-        Vector2 scale = transform.localScale;
-        if (horizontal != 0 && scale.x != horizontal)
-        {
-            scale.x = horizontal;
-            transform.localScale = scale;
+            Vector2 scale = transform.localScale;
+            //if (horizontal != 0 && scale.x != horizontal)
+            if (scale.x != horizontal)
+            {
+                scale.x = horizontal;
+                transform.localScale = scale;
+            }
         }
     }
 
     private void JumpPress()
     {
-        if (OnGround() && JumpPressed)
+        if (OnGround())//&& JumpPressed)
         {
-            rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
-        }
-
-        if (OnGround())
-        {
+            if (JumpPressed)
+            {
+                SoundManager.Instance.Play(Sounds.JumpUp);
+                rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
+            }
             animator.SetBool("land", true);
         }
         else animator.SetBool("land", false);
     }
 
-    private void JumpHold()
+    private void jumpLandSound()
+    {
+        SoundManager.Instance.Play(Sounds.JumpLand);
+    }
+
+        private void JumpHold()
     {
         if (JumpHeld)
         {
@@ -127,13 +142,11 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("LevelComplete"))
         {
+            SoundManager.Instance.Play(Sounds.Teleporter, 0.8f);
 
             LevelManager.Instance.MarkCurrentLevelComplete();
             LevelManager.Instance.MarkNextLevelUnlocked();
             levelCompleteMenu.gameObject.SetActive(true);
-           //LevelManager.Instance.LoadNextScene();
-            //LevelManager.Instance.Init();
-
         }
 
     }

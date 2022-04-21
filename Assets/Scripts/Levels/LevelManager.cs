@@ -92,9 +92,9 @@ public class LevelManager : MonoBehaviour
 
     public void SetLevelStatus(int level, LevelStatus levelStatus)
     {
+        Init();
         PlayerPrefs.SetInt(Levels[level], (int)levelStatus);
         Debug.Log("setting level " + level + " status to " + levelStatus);
-        Init();
     }
 
     /*public void MarkCurrentLevelComplete()
@@ -124,6 +124,7 @@ public class LevelManager : MonoBehaviour
     public void LoadNextScene()
     {
         //Init();
+        SoundManager.Instance.Play(Sounds.ButtonClick);
         Debug.Log("level manager is loading next scene");// which is " + NextScene.name);
         SceneManager.LoadScene(NextSceneIndex);
     }

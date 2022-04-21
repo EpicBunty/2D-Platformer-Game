@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class LobbyController : MonoBehaviour
 {
-    public Button ButtonContinue;
-    public Button buttonPlay;
-    public Button buttonQuit;
-    public GameObject LevelSelectionMenu;
+    [SerializeField] private Button ButtonContinue;
+    [SerializeField] private Button buttonPlay;
+    [SerializeField] private Button buttonBack;
+    [SerializeField] private Button buttonQuit;
+    [SerializeField] private GameObject LevelSelectionMenu;
     //private int CurrentScene;
     //public GameOverController gameOverController;
     //LevelController levelController;
@@ -20,6 +21,7 @@ public class LobbyController : MonoBehaviour
         
 
         buttonPlay.onClick.AddListener(PlayGame);
+        buttonBack.onClick.AddListener(GoBack);
         buttonQuit.onClick.AddListener(QuitGame);
 
         //buttonQuit.onClick.AddListener(LevelManager.Instance.QuitGame);
@@ -36,6 +38,7 @@ public class LobbyController : MonoBehaviour
 
     public void PlayGame()
     {
+        SoundManager.Instance.Play(Sounds.ButtonClick);
         LevelSelectionMenu.SetActive(true);
     }
     /*public void ContinueGame()
@@ -43,20 +46,15 @@ public class LobbyController : MonoBehaviour
         SceneManager.LoadScene(levelController.LastScene);
     }*/
 
-    /*public void LoadScene(string scenename)
+    void GoBack()
     {
-        SceneManager.LoadScene(scenename);
-    }*/
-
-    /*public void LoadNextScene()
-    {
-        int NextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        Debug.Log("loading scene " + NextScene);
-        SceneManager.LoadScene(NextScene);
-    }*/
+        SoundManager.Instance.Play(Sounds.ButtonBack);
+        LevelSelectionMenu.SetActive(false);
+    }
 
     public void QuitGame()
     {
+        SoundManager.Instance.Play(Sounds.ButtonBack);
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }

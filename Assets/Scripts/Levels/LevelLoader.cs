@@ -14,30 +14,8 @@ public class LevelLoader : MonoBehaviour
         button.onClick.AddListener(LoadLevel);
     }
 
-    /*private void LoadLevel()
-    {
-        LevelStatus levelStatus = LevelManager.Instance.GetLevelStatus(LevelName);
-        switch (levelStatus)
-        {
-            case LevelStatus.Locked:
-                Debug.Log("Level Locked");
-                break;
-
-            case LevelStatus.Unlocked:
-                SceneManager.LoadScene(LevelName);
-                break;
-
-            case LevelStatus.Completed:
-                SceneManager.LoadScene(LevelName);
-                break;
-        }
-
-        
-    }*/
-
     private void LoadLevel()
     {
-        LevelManager.Instance.Init();
         LevelStatus levelStatus = LevelManager.Instance.GetLevelStatus(LevelIndex);
         switch (levelStatus)
         {
@@ -46,13 +24,16 @@ public class LevelLoader : MonoBehaviour
                 break;
 
             case LevelStatus.Unlocked:
+                SoundManager.Instance.Play(Sounds.ButtonClick);
                 SceneManager.LoadScene(LevelIndex);
                 break;
 
             case LevelStatus.Completed:
+                SoundManager.Instance.Play(Sounds.ButtonClick);
                 SceneManager.LoadScene(LevelIndex);
                 break;
         }
+        //LevelManager.Instance.Init();
 
 
     }
