@@ -6,16 +6,12 @@ using UnityEngine.UI;
 
 public class LobbyController : MonoBehaviour
 {
-    [SerializeField] private Button ButtonContinue;
+    [SerializeField] private Button buttonContinue;
     [SerializeField] private Button buttonPlay;
     [SerializeField] private Button buttonBack;
     [SerializeField] private Button buttonQuit;
     [SerializeField] private GameObject LevelSelectionMenu;
-    //private int CurrentScene;
-    //public GameOverController gameOverController;
-    //LevelController levelController;
-
-
+    
     private void Awake()
     {
         
@@ -23,15 +19,15 @@ public class LobbyController : MonoBehaviour
         buttonPlay.onClick.AddListener(PlayGame);
         buttonBack.onClick.AddListener(GoBack);
         buttonQuit.onClick.AddListener(QuitGame);
+        buttonContinue.onClick.AddListener(ContinueGame);
 
         //buttonQuit.onClick.AddListener(LevelManager.Instance.QuitGame);
-        //ButtonContinue.onClick.AddListener(ContinueGame);
 
-        /*if (levelController.LastScene != 0)
+        if (LevelManager.Instance.LastScene.buildIndex != 0)
         {
-            ButtonContinue.gameObject.SetActive(true);
+            buttonContinue.gameObject.SetActive(true);
         }
-        else ButtonContinue.gameObject.SetActive(false);*/
+        else buttonContinue.gameObject.SetActive(false);
 
         //ButtonContinue.gameObject.SetActive(levelController.lastscene);
     }
@@ -41,10 +37,12 @@ public class LobbyController : MonoBehaviour
         SoundManager.Instance.Play(Sounds.ButtonClick);
         LevelSelectionMenu.SetActive(true);
     }
-    /*public void ContinueGame()
+
+    public void ContinueGame()
     {
-        SceneManager.LoadScene(levelController.LastScene);
-    }*/
+        SoundManager.Instance.Play(Sounds.ButtonClick);
+        SceneManager.LoadScene(LevelManager.Instance.LastSceneIndex);
+    }
 
     void GoBack()
     {

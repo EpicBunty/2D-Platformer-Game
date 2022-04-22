@@ -5,8 +5,9 @@ public class PlayerController : MonoBehaviour
 
     Animator animator;
     Rigidbody2D rb2d;
-    public Collider2D coll;
+    Collider2D coll;
 
+    [SerializeField] private ParticleSystem jumpholdParticle;
     [SerializeField] private GameOverController gameOverController;
     [SerializeField] private LevelCompleteMenu levelCompleteMenu;
     [SerializeField] private HealthController healthController;
@@ -31,14 +32,27 @@ public class PlayerController : MonoBehaviour
     public void OpenInGameMenu()
     {
         gameOverController.gameObject.SetActive(true);
+
+        Time.timeScale = 0;
+    }
+
+
+    public void PlayerDead()
+    {
         this.enabled = false;
+        animator.SetTrigger("death");
+        SoundManager.Instance.Play(Sounds.PlayerDeath);
+        Invoke("OpenInGameMenu", 2f);
     }
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+        LevelManager.Instance.Init();
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
+        SoundManager.Instance.Play(Sounds.NewLevel);
     }
 
 
@@ -60,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         { OpenInGameMenu(); }
-        else gameOverController.gameObject.SetActive(false);
+        // else gameOverController.gameObject.SetActive(false);
     }
 
     private void InputsAndAnimations()
@@ -84,8 +98,8 @@ public class PlayerController : MonoBehaviour
     {
         if (horizontal != 0)
         {
-            //if (!isCrouching && horizontal != 0)
-            if (!isCrouching)// == false)
+
+            if (!isCrouching)
             {
                 Vector2 position = transform.position;
                 position.x = position.x + horizontal * speed * Time.deltaTime;
@@ -97,7 +111,6 @@ public class PlayerController : MonoBehaviour
             }
 
             Vector2 scale = transform.localScale;
-            //if (horizontal != 0 && scale.x != horizontal)
             if (scale.x != horizontal)
             {
                 scale.x = horizontal;
@@ -108,10 +121,11 @@ public class PlayerController : MonoBehaviour
 
     private void JumpPress()
     {
-        if (OnGround())//&& JumpPressed)
+        if (OnGround())
         {
             if (JumpPressed)
             {
+                jumpholdParticle.Play();
                 SoundManager.Instance.Play(Sounds.JumpUp);
                 rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
             }
@@ -125,12 +139,12 @@ public class PlayerController : MonoBehaviour
         SoundManager.Instance.Play(Sounds.JumpLand);
     }
 
-        private void JumpHold()
+    private void JumpHold()
     {
         if (JumpHeld)
         {
             rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
-            //isJumping = true;
+            jumpholdParticle.Play();
         }
     }
 
@@ -143,10 +157,18 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.CompareTag("LevelComplete"))
         {
             SoundManager.Instance.Play(Sounds.Teleporter, 0.8f);
-
-            LevelManager.Instance.MarkCurrentLevelComplete();
-            LevelManager.Instance.MarkNextLevelUnlocked();
-            levelCompleteMenu.gameObject.SetActive(true);
+            //levelCompleteMenu.gameObject.SetActive(true);
+            if (LevelManager.Instance.CurrentSceneIndex > 4)
+            {
+                LevelManager.Instance.MarkCurrentLevelComplete();
+                levelCompleteMenu.gameObject.SetActive(true);
+            }
+            else
+            {
+                LevelManager.Instance.MarkCurrentLevelComplete();
+                LevelManager.Instance.MarkNextLevelUnlocked();
+                levelCompleteMenu.gameObject.SetActive(true);
+            }
         }
 
     }

@@ -2,82 +2,52 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public float movespeed;
-    public Animator animator;
-    public bool facingright;
+    Animator animator;
+    [SerializeField] private float movespeed;
+    //[SerializeField] private bool facingright;
     [SerializeField] private float DirectionFacing;
 
-    private bool movingright;
-    private Rigidbody2D rb;
+    //private bool movingright;
+    //private Rigidbody2D rb;
     //private Vector2 Scale;
-    public HealthController health;
+    [SerializeField] private HealthController health;
 
     private void Awake()
     {
         animator = gameObject.GetComponent<Animator>();
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        //rb = gameObject.GetComponent<Rigidbody2D>();
+        DirectionFacing = gameObject.transform.localScale.x;
     }
     void Update()
     {
-        DirectionFacing = gameObject.transform.localScale.x;
-
-        CheckDirectionFacing();
-
-        Movement();
+        Move();
     }
 
-    private void CheckDirectionFacing()
+    private void Move()
     {
-        if (DirectionFacing > 0)
-        {
-            facingright = true;
-        }
-        else
-        {
-            facingright = false;
-        }
+        Vector3 move = transform.position;
+        move.x = move.x + DirectionFacing * Time.deltaTime * movespeed;
+        transform.position = move;
+        animator.SetFloat("speed", movespeed);
+    }
+    private void ChomperMoveSound()
+    {
+        SoundManager.Instance.Play(Sounds.ChomperWalk);
     }
 
-    void Movement()
+    private void ChomperRunSound()
     {
-        MoveRight();
-        MoveLeft();
-        //if (rb.position.x != 0)
-        //animator.Play("Chomper Walk");
-        //Flip();
+        SoundManager.Instance.Play(Sounds.ChomperRun);
     }
-    private void MoveRight()
-    {
-        if (facingright)
-        {
-            Vector3 move = transform.position;
-            move.x = move.x + 1 * Time.deltaTime * movespeed;
-            transform.position = move;
-            movingright = true;
-            animator.Play("Chomper Walk");
-        }
-    }
-    private void MoveLeft()
-    {
-        if (!facingright)
-        {
-            Vector3 move = transform.position;
-            move.x = move.x - 1 * Time.deltaTime * movespeed;
-            transform.position = move;
-            movingright = false;
-            animator.Play("Chomper Walk");
-        }
-    }
-
     void ReverseDirection()
     {
         Vector3 Scale = transform.localScale;
-        if (movingright)
-            Scale.x *= -1;
-        else Scale.x = Mathf.Abs(Scale.x * 1);
+
+        DirectionFacing *= -1;
+        Scale.x = DirectionFacing;
         transform.localScale = Scale;
-       // Debug.Log("flipped");
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<PlayerController>())

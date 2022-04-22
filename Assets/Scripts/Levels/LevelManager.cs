@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,17 +6,16 @@ public class LevelManager : MonoBehaviour
 {
     private static LevelManager instance;
 
-    //public string Level1;
-
     private Scene CurrentScene;
     private Scene NextScene;
+    public Scene LastScene;
 
+    public int LastSceneIndex;
     public int CurrentSceneIndex;
     public int NextSceneIndex;
 
     public string[] Levels;
 
-    //public string level;
     public static LevelManager Instance { get { return instance; } }
 
     private void Awake()
@@ -30,24 +28,11 @@ public class LevelManager : MonoBehaviour
         else { Destroy(gameObject); }
 
         Init();
-        /*CurrentScene = SceneManager.GetActiveScene();
-        CurrentSceneIndex = Array.FindIndex(Levels, level => level == CurrentScene.name);
-        NextSceneIndex = CurrentSceneIndex + 1;*/
+
     }
 
     private void Start()
     {
-        /*string Level1 = "Level1";
-         * 
-        if (GetLevelStatus(Level1) == LevelStatus.Locked)
-        {
-            SetLevelStatus(Level1, LevelStatus.Unlocked);
-        }*/
-
-        /*if (GetLevelStatus(Levels[1]) == LevelStatus.Locked)
-        {
-            SetLevelStatus(Levels[1], LevelStatus.Unlocked);
-        }*/
 
         if (GetLevelStatus(1) == LevelStatus.Locked)
         {
@@ -56,26 +41,20 @@ public class LevelManager : MonoBehaviour
     }
     public void Init()
     {
-        /*CurrentScene = SceneManager.GetActiveScene();
-        CurrentSceneIndex = Array.FindIndex(Levels, level => level == CurrentScene.name);//SceneManager.GetActiveScene().buildIndex;
-        NextSceneIndex = CurrentSceneIndex + 1;
-        NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);*/
 
-        CurrentScene = SceneManager.GetActiveScene();
+        //CurrentScene = SceneManager.GetActiveScene();
         CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         NextSceneIndex = CurrentSceneIndex + 1;
-        NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
+        //NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
+        if (CurrentSceneIndex != 0)
+        {
+            LastSceneIndex = CurrentSceneIndex;
+        }
 
         Debug.Log("Current Scene is " + CurrentScene.name);
         //Debug.Log("Next Scene is " + NextScene.name);
         //Debug.Log("Next Scene is " + SceneManager.GetSceneByBuildIndex(NextSceneIndex).name;
     }
-
-    /* public LevelStatus GetLevelStatus(string level)
-     {
-         LevelStatus levelStatus = (LevelStatus) PlayerPrefs.GetInt(level, 0);
-         return levelStatus;
-     }*/
 
     public LevelStatus GetLevelStatus(int level)
     {
@@ -83,38 +62,17 @@ public class LevelManager : MonoBehaviour
         return levelStatus;
     }
 
-    /* public void SetLevelStatus(string level, LevelStatus levelStatus)
-     {
-         PlayerPrefs.SetInt(level, (int)levelStatus);
-         Debug.Log("setting level " + level + " status to " + levelStatus);
-         Init();
-     }*/
-
     public void SetLevelStatus(int level, LevelStatus levelStatus)
     {
-        Init();
+        //Init();
         PlayerPrefs.SetInt(Levels[level], (int)levelStatus);
         Debug.Log("setting level " + level + " status to " + levelStatus);
     }
-
-    /*public void MarkCurrentLevelComplete()
-    {
-        SetLevelStatus(CurrentScene.name, LevelStatus.Completed);
-    }*/
 
     public void MarkCurrentLevelComplete()
     {
         SetLevelStatus(CurrentSceneIndex, LevelStatus.Completed);
     }
-
-    /* public void MarkNextLevelUnlocked()
-     { 
-         if (NextSceneIndex < Levels.Length)
-         {
-             SetLevelStatus(Levels[NextSceneIndex], LevelStatus.Unlocked);
-         }
-         //SetLevelStatus(NextScene.name, LevelStatus.Unlocked);
-     }*/
 
     public void MarkNextLevelUnlocked()
     {
@@ -126,6 +84,11 @@ public class LevelManager : MonoBehaviour
         //Init();
         SoundManager.Instance.Play(Sounds.ButtonClick);
         Debug.Log("level manager is loading next scene");// which is " + NextScene.name);
+        if (CurrentSceneIndex > 4)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
         SceneManager.LoadScene(NextSceneIndex);
     }
 

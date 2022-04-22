@@ -5,13 +5,8 @@ using UnityEngine.UI;
 
 public class GameOverController : MonoBehaviour
 {
-    /*private int CurrentScene;
-    public int LastScene;*/
-    //private int PreviousScene;
     public Button restartButton;
     public Button mainMenuButton;
-
-    //LevelController levelController;
 
     private void Awake()
     {
@@ -25,14 +20,12 @@ public class GameOverController : MonoBehaviour
 
     public void ReloadLevel()
     {
-        //Debug.Log("reload level called from level manager");
         SoundManager.Instance.Play(Sounds.ButtonClick);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void MainMenu()
     {
-        //Debug.Log("loading main menu from level manager");
         SoundManager.Instance.Play(Sounds.ButtonBack);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
